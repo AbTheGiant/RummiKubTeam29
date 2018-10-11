@@ -41,6 +41,44 @@ public class CardTest  extends TestCase {
     }
 
 	
+	public void testCardToString()
+    {
+    	try
+    	{
+    	Card testerCard = new Card(Color.Blue,5);
+    	assertEquals("B5", testerCard.toString());
+    	}
+
+    	catch (Exception e) {
+
+            assertTrue(false);
+		}
+
+    }
+	
+	public void testCompare()
+    {
+    	try
+    	{
+    	Card testerCard= new Card(Color.Blue,5);
+
+    	Card testerCard2= new Card(Color.Blue,5);
+
+    	Card testerCard3 = new Card(Color.Green,6);
+    	Card testerCard4 = new Card (Color.Orange, 7);
+    	assertTrue(testerCard.compareTo(testerCard2)==0);
+
+    	assertTrue(testerCard3.compareTo(testerCard4)==-1);
+    	}
+
+
+    	catch (Exception e) {
+
+            assertTrue(false);
+		}
+
+    }
+	
 	
 	
 }
