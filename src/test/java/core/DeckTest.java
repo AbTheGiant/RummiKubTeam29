@@ -39,4 +39,25 @@ public class DeckTest extends TestCase {
 		}
 
     }
+	
+	
+	public void testDeal()
+    {
+    	try
+    	{
+       Deck testerDeck = new Deck();
+       Card c = testerDeck.deal();
+       assertTrue(c != null);
+       assertEquals(103, testerDeck.getNumCards());
+    	}
+
+    	catch (Exception e) {
+
+            assertTrue(false);
+		}
+    }
+
+	
+	 
+    
 }
