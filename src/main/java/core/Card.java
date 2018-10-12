@@ -1,6 +1,6 @@
 package core;
-//import junit.framework.TestCase;
-import core.Card.Color;
+
+
 
 public class Card implements Comparable {
 	public enum Color{Red ,Blue,Green,Orange}
