@@ -1,6 +1,6 @@
 package core;
 
-
+import core.Card.Color;
 import junit.framework.TestCase;
 public class CardTest  extends TestCase {
 	
@@ -10,8 +10,6 @@ public class CardTest  extends TestCase {
     	try
     	{
     	Card card = new Card(Color.Red,2);
-    	
-    	
     	assertTrue(card.getColor().equals(Color.Red));
     	card= new Card(Color.Blue, 12);
     	assertTrue(card.getColor().equals(Color.Blue));
