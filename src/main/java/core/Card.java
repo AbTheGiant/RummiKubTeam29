@@ -1,5 +1,5 @@
 package core;
-import junit.framework.TestCase;
+
 import core.Card.Color;
 
 public class Card implements Comparable {
@@ -26,6 +26,7 @@ public class Card implements Comparable {
 	}
 	public void setRank(int rank) {
 		this.rank = rank;
+	
 	}
 	
 public char getColorChar() {
@@ -109,7 +110,5 @@ public char getColorChar() {
 		return 0;
 	}
 	
-}
-
 	
-
+}
