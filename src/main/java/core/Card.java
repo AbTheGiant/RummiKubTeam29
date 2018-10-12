@@ -1,7 +1,6 @@
 package core;
 
 
-
 public class Card implements Comparable {
 	public enum Color{Red ,Blue,Green,Orange}
 	private Color color;
@@ -26,6 +25,7 @@ public class Card implements Comparable {
 	}
 	public void setRank(int rank) {
 		this.rank = rank;
+	
 	}
 	
 public char getColorChar() {
@@ -109,7 +109,5 @@ public char getColorChar() {
 		return 0;
 	}
 	
-}
-
 	
-
+}
