@@ -56,6 +56,22 @@ public class DeckTest extends TestCase {
             assertTrue(false);
 		}
     }
+	
+	
+	public void testNumberOfCards()	{
+		try {
+		Deck testerDeck = new Deck();
+		assertEquals(104,testerDeck.getNumCards());
+
+		}
+
+		catch (Exception e) {
+
+            assertTrue(false);
+		}
+
+	}
+
 
 	
 	 
