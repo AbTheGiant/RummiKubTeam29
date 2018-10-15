@@ -21,6 +21,18 @@ public class Deck {
 			}			
 		}
 	}
+	
+	//shuffle method
+	public void shuffle() {
+		Random random=new Random();
+		for(int i=0;i<deck.size();i++)
+		{
+			int swap=random.nextInt(52);
+			Card temp=deck.get(i);
+			deck.set(i, deck.get(swap));
+			deck.set(swap, temp);
+		}
+	}
 
 	
 }
