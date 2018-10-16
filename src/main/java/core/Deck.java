@@ -33,6 +33,23 @@ public class Deck {
 			deck.set(swap, temp);
 		}
 	}
+	
+	
+	public boolean isEmpty() {
+		
+		return deck.isEmpty();
+	}
+
+
+
+	public Card deal() {
+		
+		Card card=deck.get(deck.size()-1);
+		deck.remove(deck.size()-1);
+		return card;
+	}
+
+	
 
 	
 }
