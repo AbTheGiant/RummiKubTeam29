@@ -48,7 +48,11 @@ public class Deck {
 		deck.remove(deck.size()-1);
 		return card;
 	}
-
+	
+	
+	public int getNumCards() {
+		return deck.size();
+	}
 	
 
 	
