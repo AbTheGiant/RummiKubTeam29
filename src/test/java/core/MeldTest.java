@@ -34,12 +34,11 @@ public class MeldTest extends TestCase {
 			CardPile p = new CardPile();
 			CardPile newPile = new CardPile();
 		    String firstColor = " ";
-		    int i = 0;
 		    int count = 0;
 		    int counter = 0;
-		    firstColor = p.get(i);
+		    firstColor = p.get(0).getColor();
 			for(int j = 0; j<p.getSize(); j++) {
-				if(p.get(j) == firstColor) {
+				if(p.get(j).getColor() == firstColor) {
 					count++;
 				}
 			p.addPile(newPile);	
@@ -70,7 +69,8 @@ public class MeldTest extends TestCase {
 	public void testIsValid() {
 		
 	}
-	public void testToString() {	
+	public void testToString() {
+		
 	}
 	public void testAddMeld() {
 		
