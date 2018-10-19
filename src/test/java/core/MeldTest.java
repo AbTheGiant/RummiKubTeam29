@@ -66,8 +66,17 @@ public class MeldTest extends TestCase {
 		catch(Exception e) {
 			assertTrue(false);
 		}
+	}
+	public void testIsValid() {
 		
 	}
-	
+	public void testToString() {	
+	}
+	public void testAddMeld() {
+		
+	}
+	public void testGenerateMeld() {
+		
+	}
 	
 }
