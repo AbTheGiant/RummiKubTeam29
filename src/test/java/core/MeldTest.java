@@ -14,7 +14,7 @@ public class MeldTest extends TestCase {
 		Card c1 = new Card (Color.Red,12);
 		Card c2 = new Card (Color.Green,12);
 		Card c3 = new Card (Color.Blue,12);
-		Card c4 = new Card (Color.Orange,12);
+		
 
 		
 
