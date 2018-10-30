@@ -83,3 +83,57 @@ public class AIStrategy1 extends Strategy {
 			}
 		}
 	}
+	public void playHand(Game game, Player player) {
+		Meld tempMeld = new Meld();
+		tempMeld.addPile(player);		
+		ArrayList<Meld> melds = tempMeld.generateMelds();
+		Collections.sort(melds);
+		ArrayList<Card> playedCards = new ArrayList<Card>();
+		for (Meld meld : melds) {
+			boolean notPlayed = true;
+			for (Card card : meld.getCards()) {
+				if (playedCards.contains(card)) {
+					notPlayed = false;
+					break;
+				}
+			}
+			if (notPlayed) {
+				if(meld.getScore()<30&&player.getCurrentScore()<30)
+				{
+					//System.out.print("Minmal meld is 30 points!");					
+				}
+				else
+				{
+					for (Card card : meld.getCards()) {
+						player.removeCard(card);
+						playedCards.add(card);
+					}
+					game.addMeld(meld);
+					System.out.println("Placed a new meld");
+					System.out.println(meld);
+				}
+			}
+		}
+	}
+
+	public void makeMove(Game game, Player player) {
+		System.out.println(player);
+		if (player.getCurrentScore() < 30) {
+			playHand(game, player);
+		} else {
+			playTable(game, player);
+			playHand(game, player);
+		}
+		/*
+		 * Meld tempMeld = new Meld * (); tempMeld.addPile(player);
+		 * System.out.println(player); ArrayList<Meld> melds =
+		 * tempMeld.generateMelds(); Collections.sort(melds); ArrayList<Card>
+		 * playedCards = new ArrayList<Card>(); for (Meld meld : melds) {
+		 * boolean notPlayed = true; for (Card card : meld.getCards()) { if
+		 * (playedCards.contains(card)) { notPlayed = false; break; } } if
+		 * (notPlayed) { for (Card card : meld.getCards()) {
+		 * player.removeCard(card); playedCards.add(card); } game.addMeld(meld);
+		 * System.out.println(meld); } }
+		 */
+	}
+}
