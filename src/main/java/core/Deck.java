@@ -22,6 +22,27 @@ public class Deck {
 		}
 	}
 	
+	
+	Deck(int size)
+	{
+		deck=new ArrayList<Card>();
+		for(int i=1;i<=13;i++)
+		{
+			
+		    Card.Color  []colors={Card.Color.Green,Card.Color.Red,
+		    		Card.Color.Orange,Card.Color.Blue,
+		    		Card.Color.Green,Card.Color.Red,
+		    		Card.Color.Orange,Card.Color.Blue};
+			for(Card.Color color:colors)
+			{
+				if(size<=0)
+					return;
+				deck.add(new Card(color,i));
+				size--;				
+			}			
+		}
+	}
+	
 	//shuffle method
 	public void shuffle() {
 		Random random=new Random();

@@ -1,5 +1,5 @@
 package core;
-import java.util.ArrayList;
+
 
 import core.Card.Color;
 import junit.framework.TestCase;
@@ -15,7 +15,7 @@ public class PlayertTest extends TestCase {
 	
 	try {
 		
-	Player player1 = new Player();
+	Player player1 = new Player(null);
 	//CardPile tester = new CardPile();
 	Card testerOne = new Card(Color.Blue, 1);
 	//Card testOne = new Card(Color.Blue, 1);
@@ -44,7 +44,7 @@ public class PlayertTest extends TestCase {
 		
 		try {
 			
-		Player player1 = new Player();
+		Player player1 = new Player(null);
 		//CardPile tester = new CardPile();
 		Card testerOne = new Card(Color.Blue, 1);
 		//Card testOne = new Card(Color.Blue, 1);
@@ -71,7 +71,7 @@ public void testGetCard(){
 		
 		try {
 			
-		Player player1 = new Player();
+		Player player1 = new Player(null);
 		//CardPile tester = new CardPile();
 		Card testerOne = new Card(Color.Blue, 1);
 		//Card testOne = new Card(Color.Blue, 1);
