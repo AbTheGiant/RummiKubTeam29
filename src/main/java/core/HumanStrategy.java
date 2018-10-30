@@ -131,6 +131,38 @@ public class HumanStrategy extends Strategy {
 		}
 	}
 	
+	public void makeMove(Game game,Player player)
+	{
+		System.out.println(game);
+		int choice;		 
+		do
+		{
+			System.out.println(player);
+			System.out.println("1. Place new Meld");
+			System.out.println("2. Add card to existing Meld");
+			System.out.println("3. Draw tile");
+			System.out.println("4. Done");			
+			choice=input.nextInt();
+			input.nextLine();
+			if(choice==1)
+			{
+				Meld meld=addTile(game, player);
+				if(meld!=null)
+				{
+					game.addMeld(meld);
+				}
+			}
+			else if(choice==2&&player.getCurrentScore()>=30)
+			{
+				useTableTiles(game, player);
+			}
+			else if(choice==3&&game.getDeck().isEmpty()==false)
+			{				
+				player.addCard(game.getDeck().deal());
+			}
+		}while(choice!=4);
+	}
+	
 	
 	
 	
