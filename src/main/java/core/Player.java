@@ -6,12 +6,15 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class Player  extends CardPile implements Observer {
-   
+    private Strategy strategy;
     private int currentScore;
     private String name;
 
 	
-	
+	public Player(Strategy strategy) {
+		// TODO Auto-generated constructor stub
+		this.strategy=strategy;
+	}
 	
 	
 	public  void removeCard(Card card)
@@ -32,7 +35,25 @@ public class Player  extends CardPile implements Observer {
 		}
 		return null;
 	}
-	
+	public void update(Observable arg0, Object arg1) {
+		// TODO Auto-generated method stub		
+		Game game=(Game)arg0;
+		int startCount=getSize();
+		if(game.isStopGame())
+			return;
+		System.out.println("Player "+name+"’s turn");
+		strategy.makeMove(game,this);
+		//If you didn't play any of your tiles in your turn, then you have to draw another tile from the
+		//stock.
+		if(startCount==getSize()&&game.getDeck().isEmpty()==false)
+		{
+			System.out.println("Player "+name+"’s draw new tile");			
+			addCard(game.getDeck().deal());
+		}	
+		if(getSize()==0)
+			game.setStopGame(true);
+
+	}
 	public void addMeld(Meld anotherMeld)
 	{
 		for(Card card:anotherMeld.getCards())
