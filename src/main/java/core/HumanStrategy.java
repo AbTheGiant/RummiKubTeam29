@@ -51,4 +51,88 @@ public class HumanStrategy extends Strategy {
 		}
 		
 	}
+	
+	
+	public void useTableTiles(Game game,Player player)
+	{
+		// select melds		
+		ArrayList<Meld> melds=game.getMelds();
+		ArrayList<Meld> playerMelds=new ArrayList<Meld>();
+		int choice;
+		Player newPlayer= new Player(null);
+		do
+		{
+			int count=1;
+			for(Meld meld:melds)
+			{
+				System.out.println(""+(count++)+meld.toString());							
+			}			
+			System.out.println("0 -Done");	
+			choice=input.nextInt();
+			if(!(choice<1||choice>melds.size()))
+			{
+				if(!playerMelds.contains(melds.get(choice-1)))
+				{
+					playerMelds.add(melds.get(choice-1));
+					newPlayer.addPile(melds.get(choice-1));
+				}
+			}
+		}while(choice!=0);
+		//add cards to new fake player
+		ArrayList<Meld> newMelds=new ArrayList<Meld>();		
+		newPlayer.addPlayer(player);		
+		Meld playedCards=new Meld();
+		do
+		{
+			System.out.println(newPlayer);
+			System.out.println("1. Place new Meld");
+			System.out.println("2. --------------");			
+			System.out.println("3. Done");			
+			choice=input.nextInt();
+			input.nextLine();
+			if(choice==1)
+			{
+				Meld meld=addTile(game, newPlayer);
+				if(meld!=null)
+				{
+					newMelds.add(meld);
+					playedCards.addMeld(meld);
+					newPlayer.addMeld(meld);
+				}
+			}
+		}while(choice!=3);
+		// checking if all
+		boolean allCardGone=true;		
+		for(Meld meld:playerMelds)
+		{
+			for(Card card:meld.getCards())
+			{
+				if(!playedCards.getCards().contains(card))
+				{
+					allCardGone=false;
+					break;
+				}
+			}								
+		}		
+		if(allCardGone)
+		{
+			for(Meld meld:playerMelds)
+			{
+				melds.remove(meld);								
+			}
+			for(Meld meld:newMelds)
+			{
+				melds.add(meld);				
+			}			
+		}
+		else
+		{
+			System.out.println("You must play all table cards!");
+		}
+	}
+	
+	
+	
+	
+	
 }
