@@ -8,7 +8,7 @@
 	import core.Meld;
 	import junit.framework.TestCase;
 
-public class TestStrategy1 extends TestCase{
+public class TestAIStrategy extends TestCase{
 		
 		@Test
 		public void testStartGameFrom30()
