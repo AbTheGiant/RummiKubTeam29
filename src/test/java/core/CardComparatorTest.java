@@ -6,19 +6,7 @@ import junit.framework.TestCase;
 
 public class CardComparatorTest extends TestCase{
 	public void testCompare() {
-	//	Card c1 = new Card(Color.Red,12);
-	//	Card c2 = new Card(Color.Blue,10);
-	//	CardPile p = new CardPile();
-	//	p.addCard(c1);
-	//	p.addCard(c2);
-		
-	//	assertEquals(1,compare(p.get(0).getRank(),c2));
-		
-	//	Card c3 = new Card(Color.Blue,12);
-	//	Card c4 = new Card(Color.Red,12);
-		
-	//	assertEquals(-1,compare(c3,c4));
-		
+	
 		
 		
 		CardPile tester = new CardPile();
