@@ -1,12 +1,58 @@
 package core;
 
 import java.util.ArrayList;
+import org.junit.Test;
+import core.Card;
+import core.Meld;
 import core.Card.Color;
 import junit.framework.TestCase;
 
 
 public class MeldTest extends TestCase {
-
+	
+		//testing meld generate melds method growing sequence 
+		@Test
+		public void testSequenceMeld()
+		{
+			Card []cards=new Card[]
+					{new Card(Card.Color.Blue, 13),new Card(Card.Color.Blue, 11),
+						new Card(Card.Color.Blue, 12),new Card(Card.Color.Blue, 10)};
+			Meld meld=new Meld();
+			for(Card card:cards)
+			{
+				meld.addCard(card);			
+			}
+			ArrayList<Meld> melds= meld.generateMelds();
+		    assertEquals(1,melds.size());
+		    assertEquals(melds.get(0).getSize(),4);
+		    assertEquals(melds.get(0).getCards().get(0),cards[3]);
+		    assertEquals(melds.get(0).getCards().get(1),cards[1]);
+		    assertEquals(melds.get(0).getCards().get(2),cards[2]);
+		    assertEquals(melds.get(0).getCards().get(3),cards[0]);	    
+		}
+		//testing meld generate melds method growing sequence 
+			@Test
+			public void testSequenceMeld2()
+			{
+				Card []cards=new Card[]
+						{new Card(Card.Color.Blue, 13),new Card(Card.Color.Blue, 11),
+							new Card(Card.Color.Blue, 12),new Card(Card.Color.Blue, 10)
+							,new Card(Card.Color.Orange, 12)};
+				Meld meld=new Meld();
+				for(Card card:cards)
+				{
+					meld.addCard(card);			
+				}
+				ArrayList<Meld> melds= meld.generateMelds();
+			    assertEquals(1,melds.size());
+			    assertEquals(melds.get(0).getSize(),4);
+			    assertEquals(melds.get(0).getCards().get(0),cards[3]);
+			    assertEquals(melds.get(0).getCards().get(1),cards[1]);
+			    assertEquals(melds.get(0).getCards().get(2),cards[2]);
+			    assertEquals(melds.get(0).getCards().get(3),cards[0]);	    
+			}
+		
+	
 	public void testSameRankDifferentColour() {
 		int count = 5;
 		try 
