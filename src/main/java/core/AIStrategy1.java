@@ -83,6 +83,7 @@ public class AIStrategy1 extends Strategy {
 			}
 		}
 	}
+
 	public void playHand(Game game, Player player) {
 		Meld tempMeld = new Meld();
 		tempMeld.addPile(player);		

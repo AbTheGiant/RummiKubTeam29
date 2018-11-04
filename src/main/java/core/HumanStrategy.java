@@ -1,11 +1,9 @@
 package core;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
-
-public class HumanStrategy extends Strategy {
-	
-	
+public class HumanStrategy extends Strategy{
 	private static Scanner input=new Scanner(System.in);
 	
 	public Meld addTile(Game game,Player player)
@@ -51,7 +49,6 @@ public class HumanStrategy extends Strategy {
 		}
 		
 	}
-	
 	
 	public void useTableTiles(Game game,Player player)
 	{
@@ -131,6 +128,7 @@ public class HumanStrategy extends Strategy {
 		}
 	}
 	
+	
 	public void makeMove(Game game,Player player)
 	{
 		System.out.println(game);
@@ -162,9 +160,6 @@ public class HumanStrategy extends Strategy {
 			}
 		}while(choice!=4);
 	}
-	
-	
-	
 	
 	
 }

@@ -1,15 +1,15 @@
+package core;
 
-	package core;
-	import java.util.ArrayList;
+import java.util.ArrayList;
 
-	import org.junit.Test;
+import org.junit.Test;
 
-	import core.Card;
-	import core.Meld;
-	import junit.framework.TestCase;
+import core.Card;
+import core.Meld;
+import junit.framework.TestCase;
 
 public class StrategyTests extends TestCase{
-		
+	
 	@Test
 	public void testStartGameFrom30()
 	{
@@ -175,5 +175,5 @@ public class StrategyTests extends TestCase{
 		assertTrue(game.isStopGame());
 		
 	}
-		
+	
 }
