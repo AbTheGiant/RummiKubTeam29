@@ -136,6 +136,8 @@ public class Meld extends CardPile{
 				}
 			}
 		}
+		if(lastMeld.getSize()>2)
+			newMelds.add(lastMeld);
 		return newMelds;
 	}
 
@@ -147,3 +149,4 @@ public class Meld extends CardPile{
 			return super.getScore();
 	}
 }
+

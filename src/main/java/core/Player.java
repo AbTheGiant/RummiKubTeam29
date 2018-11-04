@@ -41,13 +41,13 @@ public class Player  extends CardPile implements Observer {
 		int startCount=getSize();
 		if(game.isStopGame())
 			return;
-		System.out.println("Player "+name+"’s turn");
+		System.out.println("Player "+name+"ï¿½s turn");
 		strategy.makeMove(game,this);
 		//If you didn't play any of your tiles in your turn, then you have to draw another tile from the
 		//stock.
 		if(startCount==getSize()&&game.getDeck().isEmpty()==false)
 		{
-			System.out.println("Player "+name+"’s draw new tile");			
+			System.out.println("Player "+name+"ï¿½s draw new tile");			
 			addCard(game.getDeck().deal());
 		}	
 		if(getSize()==0)

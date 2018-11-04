@@ -194,6 +194,64 @@ public class MeldTest extends TestCase {
 
 	}
 
+	public void testOneRankMeld()
+	{
+		Card []cards=new Card[]
+				{new Card(Card.Color.Blue, 13),new Card(Card.Color.Orange, 13),new Card(Card.Color.Red, 13)};
+		Meld meld=new Meld();
+		for(Card card:cards)
+		{
+			meld.addCard(card);			
+		}
+		ArrayList<Meld> melds= meld.generateMelds();
+	    assertEquals(0,melds.size());
+	    assertEquals(melds.get(0).getSize(),3);
+	    assertEquals(melds.get(0).getCards().get(0),cards[1]);
+	    assertEquals(melds.get(0).getCards().get(1),cards[0]);
+	    assertEquals(melds.get(0).getCards().get(2),cards[2]);
+	}
+	//testing meld generate melds method growing sequence 
+	
+	public void testSequenceMeld()
+	{
+		Card []cards=new Card[]
+				{new Card(Card.Color.Blue, 13),new Card(Card.Color.Blue, 11),
+					new Card(Card.Color.Blue, 12),new Card(Card.Color.Blue, 10)};
+		Meld meld=new Meld();
+		for(Card card:cards)
+		{
+			meld.addCard(card);			
+		}
+		ArrayList<Meld> melds= meld.generateMelds();
+	    assertEquals(1,melds.size());
+	    assertEquals(melds.get(0).getSize(),4);
+	    assertEquals(melds.get(0).getCards().get(0),cards[3]);
+	    assertEquals(melds.get(0).getCards().get(1),cards[1]);
+	    assertEquals(melds.get(0).getCards().get(2),cards[2]);
+	    assertEquals(melds.get(0).getCards().get(3),cards[0]);	    
+	}
+	//testing meld generate melds method growing sequence 
+		
+		public void testSequenceMeld2()
+		{
+			Card []cards=new Card[]
+					{new Card(Card.Color.Blue, 13),new Card(Card.Color.Blue, 11),
+						new Card(Card.Color.Blue, 12),new Card(Card.Color.Blue, 10)
+						,new Card(Card.Color.Orange, 12)};
+			Meld meld=new Meld();
+			for(Card card:cards)
+			{
+				meld.addCard(card);			
+			}
+			ArrayList<Meld> melds= meld.generateMelds();
+		    assertEquals(1,melds.size());
+		    assertEquals(melds.get(0).getSize(),4);
+		    assertEquals(melds.get(0).getCards().get(0),cards[3]);
+		    assertEquals(melds.get(0).getCards().get(1),cards[1]);
+		    assertEquals(melds.get(0).getCards().get(2),cards[2]);
+		    assertEquals(melds.get(0).getCards().get(3),cards[0]);	    
+		}
+	
 	
 
 	
