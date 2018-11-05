@@ -1,12 +1,16 @@
 package core;
 
 import java.util.ArrayList;
+import org.junit.Test;
+import core.Card;
+import core.Meld;
 import core.Card.Color;
 import junit.framework.TestCase;
 
 
 public class MeldTest extends TestCase {
-
+	
+		
 	public void testSameRankDifferentColour() {
 		int count = 5;
 		try 
@@ -204,7 +208,7 @@ public class MeldTest extends TestCase {
 			meld.addCard(card);			
 		}
 		ArrayList<Meld> melds= meld.generateMelds();
-	    assertEquals(0,melds.size());
+	    assertEquals(1,melds.size());
 	    assertEquals(melds.get(0).getSize(),3);
 	    assertEquals(melds.get(0).getCards().get(0),cards[1]);
 	    assertEquals(melds.get(0).getCards().get(1),cards[0]);

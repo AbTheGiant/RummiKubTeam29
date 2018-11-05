@@ -178,7 +178,5 @@ public class StrategyTests extends TestCase{
 		
 	}
 	
-	
-	
 }
 	

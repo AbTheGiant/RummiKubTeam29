@@ -100,8 +100,6 @@ public class Player  extends CardPile implements Observer {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-
- 
-	
 }
+
+
