@@ -10,6 +10,8 @@ import junit.framework.TestCase;
 
 public class StrategyTests extends TestCase{
 	
+	
+	
 	@Test
 	public void testStartGameFrom30()
 	{
@@ -175,6 +177,8 @@ public class StrategyTests extends TestCase{
 		assertTrue(game.isStopGame());
 		
 	}
+	
+	
 	
 }
 	
