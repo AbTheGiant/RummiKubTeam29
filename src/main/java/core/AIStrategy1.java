@@ -3,6 +3,11 @@ package core;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import model.Card;
+import model.Meld;
+import model.Player;
+import model.Strategy;
+
 public class AIStrategy1 extends Strategy {
 	
 	public void playTable(Game game, Player player) {

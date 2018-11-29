@@ -2,6 +2,8 @@ package core;
 
 import java.util.Comparator;
 
+import model.Card;
+
 public class CardComparator implements Comparator<Card> {
 
 	public int compare(Card arg0, Card arg1) {

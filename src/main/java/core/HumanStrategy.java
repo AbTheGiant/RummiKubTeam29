@@ -3,6 +3,11 @@ package core;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import model.Card;
+import model.Meld;
+import model.Player;
+import model.Strategy;
+
 public class HumanStrategy extends Strategy{
 	private static Scanner input=new Scanner(System.in);
 	

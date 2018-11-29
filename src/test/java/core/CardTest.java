@@ -1,7 +1,8 @@
 package core;
 
-import core.Card.Color;
 import junit.framework.TestCase;
+import model.Card;
+import model.Card.Color;
 public class CardTest  extends TestCase {
 	
 	

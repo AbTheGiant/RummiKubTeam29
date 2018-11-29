@@ -2,10 +2,11 @@ package core;
 
 import java.util.ArrayList;
 import org.junit.Test;
-import core.Card;
-import core.Meld;
-import core.Card.Color;
+
 import junit.framework.TestCase;
+import model.Card;
+import model.Meld;
+import model.Card.Color;
 
 
 public class MeldTest extends TestCase {

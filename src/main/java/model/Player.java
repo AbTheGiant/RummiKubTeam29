@@ -1,9 +1,11 @@
-package core;
+package model;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Observable;
 import java.util.Observer;
+
+import core.Game;
 
 public class Player  extends CardPile implements Observer {
     private Strategy strategy;
@@ -99,6 +101,9 @@ public class Player  extends CardPile implements Observer {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	public Strategy getStrategy() {
+		return strategy;
 	}
 }
 
