@@ -11,6 +11,7 @@ import junit.framework.TestCase;
 public class StrategyTests extends TestCase{
 	
 	@Test
+	/*
 	public void testStartGameFrom30()
 	{
 		Card []cards=new Card[]
@@ -175,5 +176,52 @@ public class StrategyTests extends TestCase{
 		assertTrue(game.isStopGame());
 		
 	}
+	*/
 	
+	public void testLessTiles() {
+		Card []cards = new Card[]{new Card(Card.Color.Blue, 13),new Card(Card.Color.Orange, 13)};
+		
+		Card []cards3 = new Card[]{new Card(Card.Color.Blue, 5),new Card(Card.Color.Orange, 5),new Card(Card.Color.Red, 5)};
+		
+		Card []cards2 = new Card[]{new Card(Card.Color.Blue, 13),new Card(Card.Color.Blue, 11),
+					new Card(Card.Color.Blue, 12),new Card(Card.Color.Blue, 10)};
+		
+		Player[] players=new Player[4]; 
+		
+		players[3]=new Player(new AIStrategy1());
+		players[3].setName("p1");
+		
+		players[0]=new Player(new AIStrategy3());
+		players[0].setName("p3");		 
+		
+		players[1]=new Player(new AIStrategy2());
+		players[1].setName("p2");
+		
+		players[2]=new Player(new AIStrategy1());
+		players[2].setName("p1");
+		
+		Meld meld=new Meld();
+		for(Card card:cards2)
+		{
+			players[0].addCard(card);			
+		}
+		for(Card card:cards)
+		{
+			players[3].addCard(card);
+			players[2].addCard(card);			
+		}
+		for(Card card:cards3)
+		{
+			players[1].addCard(card);			
+		}
+		
+		Game game=new Game(new Deck(0),players);
+		players[1].update(game,null);
+		assertFalse(game.isStopGame());
+		assertEquals(game.getMelds().size(),0);
+		players[2].update(game,null);	
+		
+		assertTrue(game.isStopGame());
+		
+	}
 }
