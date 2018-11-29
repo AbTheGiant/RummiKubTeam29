@@ -2,6 +2,10 @@ package core;
 
 import java.util.ArrayList;
 
+import model.Card;
+import model.Meld;
+import model.Player;
+
 public class AIStrategy3 extends AIStrategy1{
 	
 	public void makeMove(Game game, Player player) {

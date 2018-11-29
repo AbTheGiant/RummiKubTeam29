@@ -1,6 +1,8 @@
 package core;
 
 import junit.framework.TestCase;
+import model.Card;
+import model.Deck;
 
 public class DeckTest extends TestCase {
 

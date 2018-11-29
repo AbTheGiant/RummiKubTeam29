@@ -1,8 +1,10 @@
-package core;
+package model;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
+
+import core.CardComparator;
 
 public class Meld extends CardPile{
 	//sort cards by	
