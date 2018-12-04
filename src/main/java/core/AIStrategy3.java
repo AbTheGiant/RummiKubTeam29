@@ -10,6 +10,7 @@ public class AIStrategy3 extends AIStrategy1{
 	
 	public void makeMove(Game game, Player player) {
 		System.out.println(player);
+		int startCount = player.getSize();
  		if (player.getCurrentScore() < 30&&game.getMelds().size()>0) {
 			playHand(game, player);
 		} else {
@@ -31,7 +32,7 @@ public class AIStrategy3 extends AIStrategy1{
 			
 			if(minSize+3<player.getSize())
 			{
-				playTable(game, player);
+				playTable(game, player, 3);
 				playHand(game, player);				
 			}
 			else
@@ -40,7 +41,7 @@ public class AIStrategy3 extends AIStrategy1{
 				{
 					Meld tempMeld = new Meld();
 					tempMeld.addPile(player);
-					ArrayList<Meld> melds =tempMeld.generateMelds();
+					ArrayList<Meld> melds =tempMeld.generateMelds(3);
 					for (Meld meld : melds) {
 						for (Card card : meld.getCards()) {
 							player.removeCard(card);					
@@ -58,14 +59,19 @@ public class AIStrategy3 extends AIStrategy1{
 						for (Meld meld : melds) {
 							player.addMeld(meld);
 						}
-						playTable(game, player);
+						playTable(game, player,3);
 					}	
 				}
 				else
 				{
-					playTable(game, player);
+					playTable(game, player, 3);
 				}
 			}					
+		}
+
+ 		if (startCount == player.getSize() && game.getDeck().isEmpty() == false) {
+			System.out.println("Player " + player.getName() + "'s draw new tile");
+			game.drawCard();
 		}
 	}
 

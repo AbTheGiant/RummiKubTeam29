@@ -9,14 +9,18 @@ import model.Player;
 import model.Strategy;
 
 public class AIStrategy1 extends Strategy {
-	
-	public void playTable(Game game, Player player) {
+
+	public void playTable(Game game, Player player, int minMeldSize) {
 		// try each meld
 		for (Meld meld : game.getMelds()) {
 			Meld tempMeld = new Meld();
 			tempMeld.addPile(player);
 			tempMeld.addPile(meld);
-			ArrayList<Meld> melds = tempMeld.generateMelds();
+			ArrayList<Meld> melds = tempMeld.generateMelds(minMeldSize);
+			if (melds.isEmpty()) {
+				jokerMelds(melds, player);
+
+			}
 			// select melds with table melds.
 			boolean removed;
 			do {
@@ -68,35 +72,75 @@ public class AIStrategy1 extends Strategy {
 			boolean isNewCardPlayed = false;
 			for (Card card : player.getCards()) {
 				for (Meld solution : melds) {
-					if (solution.getCards().contains(card)) {
-						isNewCardPlayed = true;
-						break;
+
+					for (Card solutionCard : solution.getCards()) {
+
+						if (solutionCard.equals(card)) {
+
+							solutionCard.setNewCard(true);
+							isNewCardPlayed = true;
+
+						}
+
 					}
+
 				}
 			}
 			// apply solution
-			if (isNewCardPlayed) {				
-				for (Meld solution : melds) {
-					game.addMeld(solution);
-					// remove cards from player
-					for (Card card : solution.getCards()) {
-						player.removeCard(card);
+			if (isNewCardPlayed) {
+				if(minMeldSize==3){
+					
+					for (Meld solution : melds) {
+						
+						addOneMeld(game, player, meld, solution);
 					}
+					
+				}
+				else if(minMeldSize == 2){
+					
+					Meld solution = melds.get(0);
+					for(Card c: player.getCards()){
+						
+						if(c.isJoker()){
+							
+							solution.addCard(c);
+							
+						}
+						
+						
+					}
+					solution.assignJokerValue();
+					addOneMeld(game, player, meld, solution);
 				}
 				return;
-				
+
 			}
+		}
+	}
+
+	private void addOneMeld(Game game, Player player, Meld meld, Meld solution) {
+		game.removeMeld(meld);
+		game.addMeld(solution);
+		// remove cards from player
+		for (Card card : solution.getCards()) {
+			player.removeCard(card);
 		}
 	}
 
 	public void playHand(Game game, Player player) {
 		Meld tempMeld = new Meld();
-		tempMeld.addPile(player);		
-		ArrayList<Meld> melds = tempMeld.generateMelds();
+		tempMeld.addPile(player);
+		ArrayList<Meld> melds = tempMeld.generateMelds(3);
+		if (melds.isEmpty()) {
+			jokerMelds(melds, player);
+
+		}
+
 		Collections.sort(melds);
 		ArrayList<Card> playedCards = new ArrayList<Card>();
 		for (Meld meld : melds) {
 			boolean notPlayed = true;
+
 			for (Card card : meld.getCards()) {
 				if (playedCards.contains(card)) {
 					notPlayed = false;
@@ -104,14 +148,13 @@ public class AIStrategy1 extends Strategy {
 				}
 			}
 			if (notPlayed) {
-				if(meld.getScore()<30&&player.getCurrentScore()<30)
-				{
-					//System.out.print("Minmal meld is 30 points!");					
-				}
-				else
-				{
+				if (meld.getScore() < 30 && player.getCurrentScore() < 30) {
+					// System.out.print("Minmal meld is 30 points!");
+				} else {
 					for (Card card : meld.getCards()) {
-						player.removeCard(card);
+						card.setNewCard(true);
+						game.removeCard(card);
+						//player.addToCurrenScore(card.getRank());
 						playedCards.add(card);
 					}
 					game.addMeld(meld);
@@ -122,13 +165,51 @@ public class AIStrategy1 extends Strategy {
 		}
 	}
 
+	private void jokerMelds(ArrayList<Meld> melds, Player player) {
+		Card joker = null;
+		for (Card c : player.getCards()) {
+			if (c.isJoker()) {
+				joker = c;
+
+			}
+
+		}
+
+		if (joker == null) {
+			return;
+
+		}
+		Meld tempMeld = new Meld();
+		tempMeld.addPile(player);
+		ArrayList<Meld> smallMelds = tempMeld.generateMelds(2);
+		
+		if(smallMelds.isEmpty()){
+			return;
+			
+			
+			
+		}
+	Meld smallMeld = smallMelds.get(0);
+	smallMeld.addCard(joker);
+	smallMeld.assignJokerValue();
+	melds.add(smallMeld);	
+		
+	}
+
 	public void makeMove(Game game, Player player) {
 		System.out.println(player);
+		int startCount = player.getSize();
 		if (player.getCurrentScore() < 30) {
 			playHand(game, player);
 		} else {
-			playTable(game, player);
+			playTable(game, player, 3);
+			
 			playHand(game, player);
+		}
+
+		if (startCount == player.getSize() && game.getDeck().isEmpty() == false) {
+			System.out.println("Player " + player.getName() + "'s draw new tile");
+			game.drawCard();
 		}
 		/*
 		 * Meld tempMeld = new Meld * (); tempMeld.addPile(player);

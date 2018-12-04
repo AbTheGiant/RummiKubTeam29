@@ -14,8 +14,10 @@ import javax.swing.JFrame;
 import model.Card;
 import model.Deck;
 import model.GameState;
+import model.GameStateOriginator;
 import model.Meld;
 import model.Player;
+import network.Network;
 import view.GameView;
 
 public class Game extends Observable {
@@ -26,7 +28,9 @@ public class Game extends Observable {
 	private GameView view = new GameView();
 	private boolean stopGame;
 	private GameState gameState;
+	private GameStateOriginator.Memento gsMemento;
 	private Map<String, ActionListener> actions = new HashMap<>();
+	public static String myPlayer;
 
 	Game() {
 		/*
@@ -61,62 +65,55 @@ public class Game extends Observable {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				GameState newGameState = (GameState) e.getSource();
-				if (validTable(newGameState) && firstMeldCheck(newGameState)) {
-
-					me.gameState = newGameState;
-					createObservers();
-				}
-
-				else {
-					Player p = gameState.getCurrentPlayer();
-					p.addCard(deck.deal());
-					p.addCard(deck.deal());
-					p.addCard(deck.deal());
-
-				}
-				checkGameFinished();
-
-				boolean resolved = resolveDecideFirstPlayer();
-				endTurn(gv, me, resolved);
-
-			}
-
-		});
-		actions.put("Place Meld", new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Meld m = (Meld) e.getSource();
-				Player p = gameState.getCurrentPlayer();
-
-				if (p.validateMeld(m) == false) {
-
-				} else {
-
-					addMeld(m);
-
-				}
-
-				me.setChanged();
-				me.notifyObservers(gameState.copy());
-
-			}
-		});
-		actions.put("Draw Tile", new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
+				resolveDoneButton(gv, e);
 			}
 
 		});
 
 	}
 
+	private void resolveDoneButton(final GameView gv, ActionEvent e) {
+		GameState newGameState = (GameState) e.getSource();
+		if (validTable(newGameState) && firstMeldCheck(newGameState)) {
+
+			// me.gameState = newGameState;
+			// createObservers();
+		}
+
+		else {
+
+			// Player played invalid melds. Restore game state from
+			// memento
+			GameStateOriginator gso = new GameStateOriginator();
+			gso.restoreFromMemento(gsMemento);
+			this.gameState = gso.getState();
+			createObservers();
+
+			Player p = gameState.getCurrentPlayer();
+			p.addCard(deck.deal());
+			p.addCard(deck.deal());
+			p.addCard(deck.deal());
+
+		}
+		checkGameFinished();
+
+		boolean resolved = resolveDecideFirstPlayer();
+		endTurn(gv, this, resolved);
+		Network.notifySubscribers(this.gameState);
+	}
+
 	protected void checkGameFinished() {
 
-		if (this.gameState.getDeck().isEmpty() == true) {
+		if (gameState.isDecideFirstPlayer()) {
+			return;
+		}
+		boolean noCards = false;
+		for (Player p : gameState.getPlayers()) {
+			if (p.getSize() == 0) {
+				noCards = true;
+			}
+		}
+		if (this.gameState.getDeck().isEmpty() == true || noCards == true) {
 
 			int lowestScore = Integer.MAX_VALUE;
 			String lowestPlayerName = "";
@@ -136,7 +133,13 @@ public class Game extends Observable {
 				}
 			}
 			stopGame = true;
-			this.gameState.setWinMessage(lowestPlayerName + " wins with the score of " + lowestScore);
+			// If the deck is empty, print message with the lowest score
+			if (noCards == false) {
+				this.gameState.setWinMessage(lowestPlayerName + " wins with the score of " + lowestScore);
+			} else {
+				// Otherwise, just print the name of the player with no cards
+				this.gameState.setWinMessage(lowestPlayerName + " wins");
+			}
 			this.gameState.setCurrentPlayerName(firstLowestScore);
 		}
 
@@ -144,11 +147,16 @@ public class Game extends Observable {
 
 	protected void createObservers() {
 		this.deleteObservers();
-		for (Player p : gameState.getPlayers()) {
+		if (myPlayer == null) {
 
-			this.addObserver(p);
+			for (Player p : gameState.getPlayers()) {
+
+				this.addObserver(p);
+
+			}
 
 		}
+
 		this.addObserver(view);
 
 	}
@@ -202,6 +210,8 @@ public class Game extends Observable {
 						rigPlayerHand();
 
 					} else {
+						gameState.setDeck(new Deck());
+						gameState.getDeck().shuffle();
 						for (Player p : gameState.getPlayers()) {
 
 							p.getCards().clear();
@@ -219,14 +229,9 @@ public class Game extends Observable {
 
 						}
 						gameState.setDeck(new Deck(106 - cardNum));
-
-					} else {
-
-						gameState.setDeck(new Deck());
-
+						gameState.getDeck().shuffle();
 					}
 
-					gameState.getDeck().shuffle();
 					return true;
 				}
 
@@ -246,10 +251,8 @@ public class Game extends Observable {
 
 				BufferedReader br = new BufferedReader(new FileReader(p.getName() + ".txt"));
 				StringBuilder sb = new StringBuilder();
-
-				for (int i = 0; i < 14; i++) {
-
-					String line = br.readLine();
+				String line = null;
+				while ((line = br.readLine()) != null) {
 					String color = "" + line.charAt(0);
 					int rank = Integer.parseInt(line.substring(1, line.length()));
 
@@ -294,11 +297,24 @@ public class Game extends Observable {
 		 */
 	}
 
-	public void update() {
-
+	public void update(GameState newGameState) {
+		this.gameState = newGameState;
+		createObservers();
 		this.setChanged();
-		this.notifyObservers(this.gameState.copy());
-		view.update(this, this.gameState.copy());
+
+		// The observers can put the game state into an invalid state. Create a
+		// memento before hand so the state can be reverted
+		this.checkGameFinished();
+		createGameStateMemento();
+
+		this.notifyObservers(this.gameState);
+		view.update(this, this.gameState);
+	}
+
+	private void createGameStateMemento() {
+		GameStateOriginator gso = new GameStateOriginator();
+		gso.set(gameState);
+		gsMemento = gso.saveToMemento();
 	}
 
 	private void endTurn(final GameView gv, final Game me, boolean resolved) {
@@ -308,9 +324,13 @@ public class Game extends Observable {
 
 		}
 
+		// The observers can put the game state into an invalid state. Create a
+		// memento before hand so the state can be reverted
+		createGameStateMemento();
+
 		me.setChanged();
-		me.notifyObservers(gameState.copy());
-		gv.update(me, gameState.copy());
+		me.notifyObservers(gameState);
+		gv.update(me, gameState);
 	}
 
 	public void addMeld(Meld meld) {

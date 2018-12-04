@@ -136,7 +136,7 @@ public class HumanStrategy extends Strategy{
 	
 	public void makeMove(Game game,Player player)
 	{
-		System.out.println(game);
+		/*System.out.println(game);
 		int choice;		 
 		do
 		{
@@ -164,7 +164,11 @@ public class HumanStrategy extends Strategy{
 				player.addCard(game.getDeck().deal());
 			}
 		}while(choice!=4);
-	}
+	
+		game.update();
+	
+	*/}
+	
 	
 	
 }
