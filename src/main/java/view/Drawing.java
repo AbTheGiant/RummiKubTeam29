@@ -138,7 +138,13 @@ public class Drawing {
 
 	public void selected() {
 		selected = !selected;
-		
+
+	}
+
+	public boolean isSelected() {
+
+		return selected;
+
 	}
 
 	public void notSelected() {

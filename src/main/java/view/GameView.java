@@ -9,12 +9,15 @@ import java.util.Timer;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import core.Game;
 import model.Card;
 import model.Deck;
 import model.GameState;
 import model.Meld;
 import model.Player;
 
+
+ 
 
 public class GameView extends JPanel implements MouseListener, MouseMotionListener, Observer, KeyListener {
 	Drawing tile;
@@ -47,9 +50,11 @@ public class GameView extends JPanel implements MouseListener, MouseMotionListen
 			public void run() {
 				timeRemaining--;
 				if (timeRemaining == 0 && useTimer == true) {
+					if (doneButton.unavailabele == true) {
 
-					gameState.getMelds().add(new Meld());
-					actions.get("Done").actionPerformed(new ActionEvent(gameState, 0, ""));
+						drawTile();
+					}
+					triggerDone();
 
 				}
 				repaint();
@@ -64,17 +69,23 @@ public class GameView extends JPanel implements MouseListener, MouseMotionListen
 		// offscreen = createImage(1020, 650);
 		// offg = offscreen.getGraphics();
 		requestFocus();
-		
+		// //////////////////////////////////////////////////
 
 	}
 
 	public void createButtons() {
 		buttons.clear();
+
+		if (!gameState.getCurrentPlayerName().equals(Game.myPlayer) && Game.myPlayer != null) {
+
+			return;
+
+		}
 		doneButton = new Button("pics/done.png", new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				actions.get("Done").actionPerformed(new ActionEvent(gameState, 0, ""));
+				triggerDone();
 				;
 
 			}
@@ -99,7 +110,20 @@ public class GameView extends JPanel implements MouseListener, MouseMotionListen
 
 				}
 				Meld meld = new Meld();
+				for (ViewMeld vm : viewMelds) {
 
+					for (int i = vm.tiles.size() - 1; i >= 0; i--) {
+						ViewCard vc = vm.tiles.get(i);
+						if (vc.isSelected()) {
+
+							vm.getMeld().getCards().remove(i);
+							meld.addCard(vc.getCard());
+
+						}
+
+					}
+
+				}
 				for (ViewCard vs : tiles) {
 
 					if (vs.isSelected()) {
@@ -108,6 +132,16 @@ public class GameView extends JPanel implements MouseListener, MouseMotionListen
 						meld.addCard(c);
 						gameState.getCurrentPlayer().addToCurrenScore(c.getRank());
 
+						Player p = gameState.getCurrentPlayer();
+						for (int i = p.getSize() - 1; i >= 0; i--) {
+
+							Card playerCard = p.getCards().get(i);
+							if (playerCard.equals(c)) {
+								p.getCards().remove(playerCard);
+								break; // if there are duplicate tiles in the
+										// player's hand, don't remove both
+							}
+						}
 					}
 
 				}
@@ -117,16 +151,6 @@ public class GameView extends JPanel implements MouseListener, MouseMotionListen
 				doneButton.unavailabele = false;
 				drawButton.unavailabele = true;
 				gameState.getMelds().add(meld);
-				Player p = gameState.getCurrentPlayer();
-				for (int i = p.getSize() - 1; i >= 0; i--) {
-
-					Card c = p.getCards().get(i);
-					if (meld.getCards().contains(c)) {
-
-						p.getCards().remove(c);
-
-					}
-				}
 
 				refreshViewItems();
 
@@ -141,16 +165,7 @@ public class GameView extends JPanel implements MouseListener, MouseMotionListen
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				if (gameState.getDeck().isEmpty() == false) {
-					System.out.println("Player " + gameState.getThisPlayer() + "s draw new tile");
-					Card c = gameState.getDeck().deal();
-
-					gameState.getCurrentPlayer().addCard(c);
-					tiles.add(new ViewCard(c.getCardfileName(), c));
-					doneButton.unavailabele = false;
-					drawButton.unavailabele = true;
-					placeButton.unavailabele = true;
-				}
+				drawTile();
 
 			}
 		};
@@ -226,7 +241,7 @@ public class GameView extends JPanel implements MouseListener, MouseMotionListen
 
 		GameState gameState = (GameState) arg1;
 
-		this.gameState = gameState.copy();
+		this.gameState = gameState;
 		if (gameState.getWinMessage() == null) {
 
 			createButtons();
@@ -288,16 +303,27 @@ public class GameView extends JPanel implements MouseListener, MouseMotionListen
 
 		}
 
+		ViewMeld selectedVm = null;
+		for (ViewMeld vm : viewMelds) {
+
+			if (vm.hasSelectedTile()) {
+
+				selectedVm = vm;
+
+			}
+
+		}
 		for (int i2 = viewMelds.size() - 1; i2 >= 0; i2--) {
 			ViewMeld m = viewMelds.get(i2);
 
 			if (m.mouseCollide(e.getX(), e.getY())) {
-
+				boolean playTile = false;
 				for (int i = tiles.size() - 1; i >= 0; i--) {
 
 					ViewCard vc = tiles.get(i);
 
 					if (vc.isSelected()) {
+						playTile = true;
 						doneButton.unavailabele = false;
 						drawButton.unavailabele = true;
 
@@ -308,13 +334,44 @@ public class GameView extends JPanel implements MouseListener, MouseMotionListen
 					}
 
 				}
+				if (playTile == false) {
+					if (selectedVm != null && selectedVm != m) {
+
+						moveMeldTiles(selectedVm, m);
+
+					} else {
+						m.clickTile(e.getX(), e.getY());
+						repaint();
+					}
+				} else {
+
+					refreshViewItems();
+
+				}
 				m.getMeld().assignJokerValue();
-				refreshViewItems();
+
 				break;
 			}
 
 		}
 
+	}
+
+	private void moveMeldTiles(ViewMeld selectedVm, ViewMeld m) {
+
+		for (int i = selectedVm.tiles.size() - 1; i >= 0; i--) {
+
+			ViewCard vc = selectedVm.tiles.get(i);
+			if (vc.isSelected()) {
+
+				selectedVm.tiles.remove(i);
+				selectedVm.getMeld().getCards().remove(vc.getCard());
+				m.getMeld().getCards().add(vc.getCard());
+
+			}
+
+		}
+		refreshViewItems();
 	}
 
 	public void mouseReleased(MouseEvent e) {
@@ -382,13 +439,20 @@ public class GameView extends JPanel implements MouseListener, MouseMotionListen
 
 		}
 
+		else if (e.getKeyCode() == 8) {
+
+			rigString = "";
+			repaint();
+
+		}
+
 		else {
 
 			rigString += e.getKeyChar();
 			repaint();
 
 		}
-		
+
 		System.out.println(e.getKeyCode());
 	}
 
@@ -409,4 +473,36 @@ public class GameView extends JPanel implements MouseListener, MouseMotionListen
 		// TODO Auto-generated method stub
 
 	}
+
+	private void drawTile() {
+		if (gameState.getDeck().isEmpty() == false) {
+			System.out.println("Player " + gameState.getThisPlayer() + "s draw new tile");
+			Card c = gameState.getDeck().deal();
+
+			gameState.getCurrentPlayer().addCard(c);
+			tiles.add(new ViewCard(c.getCardfileName(), c));
+			doneButton.unavailabele = false;
+			drawButton.unavailabele = true;
+			placeButton.unavailabele = true;
+		}
+	}
+
+	private void triggerDone() {
+		for(int i = gameState.getMelds().size()-1; i>= 0; i--){
+			
+			Meld m = gameState.getMelds().get(i);
+			if(m.getSize()==0){
+				
+				gameState.getMelds().remove(i);
+				
+				
+			}
+			
+			
+			
+		}
+		
+		actions.get("Done").actionPerformed(new ActionEvent(gameState, 0, ""));
+	}
+}
 }
