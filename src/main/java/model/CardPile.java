@@ -1,8 +1,9 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class CardPile implements Comparable{
+public class CardPile implements Comparable<CardPile>, Serializable{
 	protected ArrayList<Card> cards=new ArrayList<Card> ();
 	public  void addCard(Card card)
 	{
@@ -30,12 +31,11 @@ public class CardPile implements Comparable{
 		
 	}
 	
-	public int compareTo(Object arg0){
-		CardPile other=(CardPile)arg0;
+	public int compareTo(CardPile other){
 		if(this.getScore()>other.getScore())
-			return 1;
-		else if(this.getScore()<other.getScore())
 			return -1;
+		else if(this.getScore()<other.getScore())
+			return 1;
 		return 0;
 	}
 	public ArrayList<Card> getCards() {
@@ -43,4 +43,3 @@ public class CardPile implements Comparable{
 	}
 
 }
-
