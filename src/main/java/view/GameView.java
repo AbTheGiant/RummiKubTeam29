@@ -505,4 +505,3 @@ public class GameView extends JPanel implements MouseListener, MouseMotionListen
 		actions.get("Done").actionPerformed(new ActionEvent(gameState, 0, ""));
 	}
 }
-}
