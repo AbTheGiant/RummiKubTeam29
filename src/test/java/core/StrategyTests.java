@@ -460,7 +460,7 @@ new Card(Card.Color.Green, 9)};
 		
 		
 		System.out.println("Requirement 12A");
-		;
+		
 		Game game=new Game(new Deck(0),players);
 		
 		
